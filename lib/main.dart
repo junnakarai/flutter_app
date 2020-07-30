@@ -3,18 +3,14 @@ import 'package:flutter/material.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
-
   @override
   _MyAppState createState() => _MyAppState();
-
 }
 
 class _MyAppState extends State<MyApp> {
-
   static DateTime _now = DateTime.now();
   static DateTime _thisWeekMonday = _now.subtract(new Duration(days: _now.weekday - 1));
   var _weekName =  ['月', '火', '水', '木', '金', '土', '日'];
-
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -24,15 +20,10 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Column(
           children: <Widget>[
-            RaisedButton(
-              child: Text('Next Week'),
-              onPressed: (){
-                _pushButton();
-              },
-            ),
             ListView.builder(
               padding: const EdgeInsets.all(6.0),
               shrinkWrap: true,
+              // ignore: missing_return
               itemBuilder: (BuildContext context,int i) {
                 if (i.isOdd) return Divider();
                 final index = i ~/ 2;
@@ -50,11 +41,4 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-
-  void _pushButton() {
-    setState(() {
-      _thisWeekMonday = _thisWeekMonday.add(new Duration(days: 7));
-    });
-  }
-
 }
