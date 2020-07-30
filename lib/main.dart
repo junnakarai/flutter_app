@@ -1,62 +1,60 @@
-// Copyright 2018 The Flutter team. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+
+  @override
+  _MyAppState createState() => _MyAppState();
+
+}
+
+class _MyAppState extends State<MyApp> {
+
+  static DateTime _now = DateTime.now();
+  static DateTime _thisWeekMonday = _now.subtract(new Duration(days: _now.weekday - 1));
+  var _weekName =  ['月', '火', '水', '木', '金', '土', '日'];
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Startup Name Generator',
-      home: RandomWords(),
-    );
-  }
-}
-
-class RandomWords extends StatefulWidget {
-  @override
-  _RandomWordsState createState() => _RandomWordsState();
-}
-
-class _RandomWordsState extends State<RandomWords> {
-    final _suggestions = <WordPair>[];
-    final _biggerFont = TextStyle(fontSize: 18.0);
-
-  Widget _buildSuggestions() {
-    return ListView.builder(
-        padding: EdgeInsets.all(16.0),
-        itemBuilder: /*1*/ (context, i) {
-          if (i.isOdd) return Divider(); /*2*/
-
-          final index = i ~/ 2; /*3*/
-          if (index >= _suggestions.length) {
-            _suggestions.addAll(generateWordPairs().take(10)); /*4*/
-          }
-          return _buildRow(_suggestions[index]);
-        });
-  }
-
-  Widget _buildRow(WordPair pair) {
-    return ListTile(
-      title: Text(
-        pair.asPascalCase,
-        style: _biggerFont,
+    return new MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('DateTime'),
+        ),
+        body: Column(
+          children: <Widget>[
+            RaisedButton(
+              child: Text('Next Week'),
+              onPressed: (){
+                _pushButton();
+              },
+            ),
+            ListView.builder(
+              padding: const EdgeInsets.all(6.0),
+              shrinkWrap: true,
+              itemBuilder: (BuildContext context,int i) {
+                if (i.isOdd) return Divider();
+                final index = i ~/ 2;
+                final indexDay = _thisWeekMonday.add(new Duration(days: index));
+                if (index < 7) {
+                  return ListTile(
+                    title: Text(" ${indexDay.month}/${indexDay.day} (${_weekName[index]})",textAlign: TextAlign.center,),
+                    onTap: (){},
+                  );
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Startup Name Generator'),
-      ),
-      body: _buildSuggestions(),
-    );
+  void _pushButton() {
+    setState(() {
+      _thisWeekMonday = _thisWeekMonday.add(new Duration(days: 7));
+    });
   }
-}
 
+}
